@@ -36,11 +36,11 @@ class RegisterAPI(MethodView):
                 db.session.add(user)
                 db.session.commit()
                 # generate the auth token
-                auth_token = user.encode_auth_token(user.id)
+                #auth_token = user.encode_auth_token(user.id)
                 responseObject = {
                     'status': 'success',
                     'message': 'Successfully registered.',
-                    'auth_token': auth_token.decode()
+                    'auth_token': user.id
                 }
                 return make_response(jsonify(responseObject)), 201
             except Exception as e:
@@ -56,6 +56,15 @@ class RegisterAPI(MethodView):
             }
             return make_response(jsonify(responseObject)), 202
 
+class viewUsers(MethodView):
+    def get(self):
+        users = User.query.all()
+        s = []
+        for i in users:
+            s.append(i.email)
+        x = str(s)
+        return x
+        
 
 # define the API resources
 registration_view = RegisterAPI.as_view('register_api')
@@ -65,4 +74,12 @@ auth_blueprint.add_url_rule(
     '/auth/register',
     view_func=registration_view,
     methods=['POST', 'GET']
+)
+
+userview = viewUsers.as_view('user_view')
+
+auth_blueprint.add_url_rule(
+    '/users/index',
+    view_func=userview,
+    methods=['GET']
 )
