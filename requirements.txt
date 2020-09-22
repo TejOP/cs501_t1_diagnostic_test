@@ -20,3 +20,4 @@ wrapt==1.12.1
 coverage==5.3
 flask_script==2.0.6
 flask_migrate==2.5.3
+flask_bcrypt==0.7.1
